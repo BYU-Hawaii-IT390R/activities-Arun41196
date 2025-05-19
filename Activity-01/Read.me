@@ -1,0 +1,60 @@
+
+
+1. Renamed the function
+
+   * From `scan_txt_files` ➝ `scan_files_by_extension`
+   * Why? Because now it works for *any* extension, not just `.txt`.
+
+2. Added a new command-line option
+
+   ```python
+   parser.add_argument("--ext", default="txt", help="File extension to search for (default: txt)")
+   ```
+
+   * This lets users type `--ext log` or `--ext md` to scan other file types.
+   * If the user doesn’t type `--ext`, it will default to `.txt`.
+
+3. Used the extension in the file search
+
+   ```python
+   files = list(directory.rglob(f"*{extension}"))
+   ```
+
+   * This line finds all files that match the given extension.
+
+4. Handled extension formatting
+
+   ```python
+   if not extension.startswith('.'):
+       extension = '.' + extension
+   ```
+
+   * This makes sure extensions like `log` become `.log` automatically.
+   * So the user can type `--ext log` instead of `--ext .log`.
+
+5. Updated print text
+
+   * Changed `"Found X text files"` ➝ `"Found X '.ext' files"` to reflect the selected file type.
+
+
+
+Example of How It Works
+
+Run this to scan `.log` files:
+
+```bash
+py scan.py test_root --ext log
+```
+
+Run this to scan `.md` files:
+
+```bash
+py scan.py test_root --ext md
+```
+
+Run this to scan default `.txt` files:
+
+```bash
+py scan.py test_root
+```
+
